@@ -54,12 +54,12 @@ docker run --rm --cap-add=NET_ADMIN --network=host --device /dev/net/tun:/dev/ne
 ```bash
 services:
   sidestore-vpn:
-  image: ghcr.io/xddxdd/sidestore-vpn
-    cap_add:
-      - NET_ADMIN
-    network_mode: host
-      devices:
-        - /dev/net/tun:/dev/net/tun
+    image: ghcr.io/xddxdd/sidestore-vpn
+      cap_add:
+        - NET_ADMIN
+      network_mode: host
+        devices:
+          - /dev/net/tun:/dev/net/tun
 ```
 
 The container requires the `/dev/net/tun` device, as well as `network_mode: host` to create the interface. The `NET_ADMIN` permission allows the container to perform network-related tasks that require elevated permissions.
