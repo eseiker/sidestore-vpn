@@ -14,6 +14,11 @@ struct Args {
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = Args::parse();
 
+    // Set up Ctrl+C handler to exit immediately
+    ctrlc::set_handler(|| {
+        std::process::exit(0);
+    })?;
+
     let mut config = tun::Configuration::default();
     config.tun_name(&args.tun_name);
     config.up();

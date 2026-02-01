@@ -7,3 +7,4 @@ edition = "2024"
 tun = "0.8.2"
 smoltcp = { version = "0.12.0", features = ["proto-ipv4"] }
 clap = { version = "4.0", features = ["derive"] }
+ctrlc = "3.4"
