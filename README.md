@@ -49,6 +49,24 @@ A Docker image is available at `ghcr.io/xddxdd/sidestore-vpn`:
 docker run --rm --cap-add=NET_ADMIN --network=host --device /dev/net/tun:/dev/net/tun ghcr.io/xddxdd/sidestore-vpn
 ```
 
+### Tailscale-enabled Docker image
+
+Build the Tailscale variant (includes `tailscaled` and advertises routes via `TS_ROUTES`):
+
+```bash
+docker build -t sidestore-vpn:tailscale --target tailscale .
+```
+
+Run it with your Tailscale auth key and the subnet routes you want to advertise (for example `10.7.0.0/24` for the SideStore traffic):
+
+```bash
+docker run --rm --cap-add=NET_ADMIN --network=host --device /dev/net/tun:/dev/net/tun \
+  -e TS_AUTHKEY=tskey-xxxxxxx \
+  sidestore-vpn:tailscale
+```
+
+If `TS_ROUTES` is not set it defaults to `10.7.0.0/24` for SideStore. The Tailscale variant still needs `--cap-add=NET_ADMIN`, `--network=host`, and `/dev/net/tun` to create the tunnel device and route the advertised subnets.
+
 ## Docker compose
 
 ```bash

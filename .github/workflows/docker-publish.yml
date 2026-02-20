@@ -4,6 +4,8 @@ on:
   push:
     branches: [master]
     tags: ['v*']
+  pull_request:
+    branches: [master]
 
 jobs:
   build-and-push:
@@ -24,7 +26,7 @@ jobs:
       - uses: docker/metadata-action@v5
         id: meta
         with:
-          images: ghcr.io/xddxdd/sidestore-vpn
+          images: ghcr.io/${{ github.repository_owner }}/sidestore-vpn
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
             type=semver,pattern={{version}}
@@ -33,9 +35,19 @@ jobs:
       - uses: docker/build-push-action@v6
         with:
           context: .
+          target: minimal
           platforms: linux/amd64,linux/arm64/v8,linux/ppc64le
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          target: tailscale
+          platforms: linux/amd64,linux/arm64/v8
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}-tailscale
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
