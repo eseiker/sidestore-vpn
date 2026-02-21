@@ -13,8 +13,8 @@ COPY src ./src
 # Build a statically linked binary
 RUN cargo build --release
 
-# Final stage - minimal image from scratch
-FROM scratch AS minimal
+# Final stage - base image from scratch
+FROM scratch AS base
 
 # Copy the statically linked binary
 COPY --from=builder /app/target/release/sidestore-vpn /sidestore-vpn
@@ -26,9 +26,10 @@ ENTRYPOINT ["/sidestore-vpn"]
 FROM tailscale/tailscale:stable AS tailscale
 ENV TS_ROUTES=10.7.0.1/32
 ENV TS_SOCKET=/var/run/tailscale/tailscaled.sock
-COPY --from=minimal /sidestore-vpn /sidestore-vpn
+ENV TS_STATE_DIR=/var/lib/tailscale
+COPY --from=base /sidestore-vpn /sidestore-vpn
 COPY tailscale-entrypoint.sh /tailscale-entrypoint.sh
 RUN chmod +x /tailscale-entrypoint.sh
 ENTRYPOINT ["/tailscale-entrypoint.sh"]
 
-FROM minimal
+FROM base

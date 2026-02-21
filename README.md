@@ -74,7 +74,7 @@ docker run --rm --cap-add=NET_ADMIN -v /dev/net/tun:/dev/net/tun ghcr.io/xddxdd/
 ```
 
 ```bash
-docker run --rm --cap-add=NET_ADMIN -v /dev/net/tun:/dev/net/tun \
+docker run --rm --cap-add=NET_ADMIN -v /dev/net/tun:/dev/net/tun -v ./state:/var/lib/tailscale \
   -e TS_AUTHKEY=tskey-xxxxxxx \
   -e TS_HOSTNAME=sidestore-vpn \
   ghcr.io/xddxdd/sidestore-vpn:tailscale
