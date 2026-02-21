@@ -49,7 +49,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 ipv4_packet.set_dst_addr(src_addr);
                 ipv4_packet.set_src_addr(dst_addr);
 
-                // The checksum is automatically updated by the setters.
+                // The checksum remains valid: swapping src and dst preserves the
+                // one's complement sum over the header words.
                 dev.write(ipv4_packet.into_inner())?;
             }
         }

@@ -1,6 +1,6 @@
 services:
   sidestore-vpn:
-    image: ghcr.io/xddxdd/sidestore-vpn:latest
+    image: ghcr.io/eseiker/sidestore-vpn:latest
     cap_add:
       - NET_ADMIN
     devices:
