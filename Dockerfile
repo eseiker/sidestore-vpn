@@ -25,11 +25,11 @@ ENTRYPOINT ["/sidestore-vpn"]
 # Tailscale image
 FROM tailscale/tailscale:stable AS tailscale
 ENV TS_ROUTES=10.7.0.1/32
-ENV TS_SOCKET=/var/run/tailscale/tailscaled.sock
-ENV TS_STATE_DIR=/var/lib/tailscale
+ENV TS_USERSPACE="false"
+ENV TS_EXTRA_ARGS="--snat-subnet-routes=false"
+ENV TS_TAILSCALED_EXTRA_ARGS="--verbose=-1"
 COPY --from=base /sidestore-vpn /sidestore-vpn
-COPY tailscale-entrypoint.sh /tailscale-entrypoint.sh
-RUN chmod +x /tailscale-entrypoint.sh
+COPY --chmod=755 tailscale-entrypoint.sh /tailscale-entrypoint.sh
 ENTRYPOINT ["/tailscale-entrypoint.sh"]
 
 FROM base
